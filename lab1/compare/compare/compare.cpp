@@ -6,7 +6,7 @@
 using namespace std;
 
 char ch, ch1;
-int currentLine = 0;
+int currentLine = 1;
 
 int main(int argc, char * argv[])
 {
@@ -33,8 +33,8 @@ int main(int argc, char * argv[])
 	}	
 
 	while (inputFirst.get(ch) && inputSecond.get(ch1))
-	{
-		if (ch == '\n')
+	{	
+		if (ch == '\n' || ch1 == '\n')
 		{
 			currentLine = currentLine + 1;
 		}
@@ -45,7 +45,13 @@ int main(int argc, char * argv[])
 			return 1;
 		}
 	}
-	
+
+	if (inputFirst.get(ch) || inputSecond.get(ch1))
+	{
+		cout << "Files are different. Line number is " << currentLine;
+		return 1;
+	}
+		
 	cout << "Files are equal!\n";
 	return 0;
 }
