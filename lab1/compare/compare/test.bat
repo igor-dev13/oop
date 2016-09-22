@@ -1,20 +1,20 @@
 set PROGRAM="%~1"
 
-rem cà ¢­¥­¨¥ ¯ãáâëå ä ©«®¢
+rem cðàâíåíèå ïóñòûõ ôàéëîâ
 %PROGRAM% empty.txt %TEMP%\empty.txt
 if NOT ERRORLEVEL 0 goto err
 fc.exe %TEMP%\empty.txt empty.txt
 if NOT ERRORLEVEL 0 goto err
 
-rem ®¦¨¤ ¥¬ ­¥­ã«¥¢®© ª®¤ ®è¨¡ª¨ ¥á«¨ ®¤¨­ ä ©« ¯ãáâ,   ¢â®à®© ­¥â
+rem îæèäàåì íåíóëåâîé êîä îøèáêè åñëè îäèí ôàéë ïóñò, à âòîðîé íåò
 fc.exe empty.txt text.txt
 if NOT ERRORLEVEL 1 goto err
 
-rem ®¦¨¤ ¥¬ ­¥­ã«¥¢®© ª®¤ ®è¨¡ª¨ ¥á«¨ ä ©«ë à §­ë¥
+rem îæèäàåì íåíóëåâîé êîä îøèáêè åñëè ôàéëû ðàçíûå
 fc.exe text.txt text2.txt
 if NOT ERRORLEVEL 1 goto err
 
-rem ®¦¨¤ ¥¬ ­¥­ã«¥¢®© ª®¤ ®è¨¡ª¨ ¥á«¨ ­¥ ­ ©¤¥­ ®¤¨­ ¨§ ¢å®¤ïé¨å ä ©«®¢
+rem îæèäàåì íåíóëåâîé êîä îøèáêè åñëè íå íàéäåí îäèí èç âõîäÿùèõ ôàéëîâ
 %PROGRAM% non-existing-file-name.txt text.txt > "%TEMP%\output.txt"
 if NOT ERRORLEVEL 1 goto err
 fc.exe "%TEMP%\output.txt" expected-output-when-input-file-is-missing.txt
