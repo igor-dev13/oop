@@ -1,21 +1,17 @@
 set PROGRAM="%~1"
 
 rem cравнение пустых файлов
-%PROGRAM% empty.txt empty2.txt
+%PROGRAM% empty.txt %TEMP%\empty.txt
 if NOT ERRORLEVEL 0 goto err
-fc.exe %TEMP%\empty.txt empty2.txt
+fc.exe %TEMP%\empty.txt empty.txt
 if NOT ERRORLEVEL 0 goto err
 
 rem ожидаем ненулевой код ошибки если один файл пуст, а второй нет
-%PROGRAM% empty.txt text.txt
-if NOT ERRORLEVEL 1 goto err
-fc.exe %TEMP%\empty.txt text.txt
+fc.exe empty.txt text.txt
 if NOT ERRORLEVEL 1 goto err
 
 rem ожидаем ненулевой код ошибки если файлы разные
-%PROGRAM% text.txt text2.txt
-if NOT ERRORLEVEL 1 goto err
-fc.exe %TEMP%\text.txt text2.txt
+fc.exe text.txt text2.txt
 if NOT ERRORLEVEL 1 goto err
 
 rem ожидаем ненулевой код ошибки если не найден один из входящих файлов
