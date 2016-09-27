@@ -5,11 +5,12 @@
 
 using namespace std;
 
-char ch, ch1;
-int currentLine = 1;
-
 int main(int argc, char * argv[])
 {
+	ifstream firstFile(argv[1]), secondFile(argv[2]);
+	char ch1, ch2;
+	int currentLine = 1;
+
 	if (argc != 3)
 	{
 		cout << "Invalid arguments count\n"
@@ -17,40 +18,44 @@ int main(int argc, char * argv[])
 		return 1;
 	}
 
-	ifstream inputFirst(argv[1]);
-	ifstream inputSecond(argv[2]);
-
-	if (!inputFirst.is_open())
+	if (!firstFile.is_open())
 	{
 		cout << "Failed to open " << argv[1] << " for reading\n";
 		return 1;
 	}
 
-	if (!inputSecond.is_open())
+	if (!secondFile.is_open())
 	{
 		cout << "Failed to open " << argv[2] << " for reading\n";
 		return 1;
 	}	
 
-	while (inputFirst.get(ch) && inputSecond.get(ch1))
+	auto ReadFiles = [&] {
+		firstFile.get(ch1);
+		secondFile.get(ch2);
+		return firstFile && secondFile;
+	};
+		
+	while (ReadFiles())
 	{	
-		if (ch == '\n' || ch1 == '\n')
+		if (ch1 == '\n' && ch2 == '\n')
 		{
-			currentLine = currentLine + 1;
+			++currentLine;
 		}
 
-		if (ch != ch1)
+		if (ch1 != ch2)
 		{
 			cout << "Files are different. Line number is " << currentLine;
 			return 1;
 		}
 	}
 
-	if (inputFirst.get(ch) || inputSecond.get(ch1))
+	if (firstFile || secondFile)
 	{
 		cout << "Files are different. Line number is " << currentLine;
 		return 1;
 	}
+	
 		
 	cout << "Files are equal!\n";
 	return 0;
