@@ -56,7 +56,6 @@ int main(int argc, char * argv[])
 	string errorMessage = "";
 	const int FILE_COMPARISON_ERROR = -1;
 	const int FILES_ARE_EQUAL = 0;
-	const int FILES_ARE_DIFFERENT = 1;
 
 	if (argc != 3)
 	{
@@ -72,18 +71,14 @@ int main(int argc, char * argv[])
 		cout << errorMessage << "\n";
 		return 1;
 	}
-	else if (result >= FILES_ARE_DIFFERENT)
-	{
-		cout << "Files are different. Line number is " << result;
-		return 1;
-	}
 	else if (result == FILES_ARE_EQUAL)
 	{
-		cout << "Files are equal!\n";
+		cout << "Files are equal!\n";		
 	}
 	else
 	{
-
+		cout << "Files are different. Line number is " << result << "\n";
+		return 1;
 	}
 	
 	return 0;
