@@ -1,0 +1,1 @@
+bite number range is from -255 to 255

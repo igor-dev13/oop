@@ -6,6 +6,9 @@
 
 using namespace std;
 
+const int FILE_COMPARISON_ERROR = -1;
+const int FILES_ARE_EQUAL = 0;
+
 int CompareFiles(const string & fileName1, const string & fileName2, string & error)
 {
 	char ch1, ch2;
@@ -54,8 +57,6 @@ int CompareFiles(const string & fileName1, const string & fileName2, string & er
 int main(int argc, char * argv[])
 {
 	string errorMessage = "";
-	const int FILE_COMPARISON_ERROR = -1;
-	const int FILES_ARE_EQUAL = 0;
 
 	if (argc != 3)
 	{
