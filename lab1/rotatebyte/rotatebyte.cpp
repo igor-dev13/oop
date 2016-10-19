@@ -1,84 +1,109 @@
 #include "stdafx.h"
-#include <fstream>
 #include <iostream>
-#include <conio.h>
-#include <stdlib.h>
-#include <bitset>
-#include "rotatebyte.h"
+#include <string>
 
 using namespace std;
 
-const int BITE_ROTATE_ERROR = -1;
+enum class RotationDirection
+{
+	LEFT,
+	RIGHT
+};
 
-int RotateNumber(const string & inputValue1, const string & inputValue2, char * inputValue3, string & error)
-{		
-	char direction = inputValue3[0];
-	
-	int number = atoi(inputValue1.c_str());
-	int rotationCount = atoi(inputValue2.c_str());
-
-	if (number == 0)
+RotationDirection GetRotateDirection(const string &choice)
+{
+	if (choice == "R")
 	{
-		error = error.append("Enter a valid integer number for <bite>");
-		return -1;
+		return RotationDirection::RIGHT;
 	}
-
-	if (rotationCount == 0)
+	else if (choice == "L")
 	{
-		error = error.append("Enter a valid integer number for  <number of bits>");
-		return -1;
+		return RotationDirection::LEFT;
 	}
-
-
-	if (direction != 'R' && direction != 'L')
-	{
-		error = error.append("Enter a valid direction, uppercase - L for left, or R for right");
-		return -1;
-	}
-
-	if (number > 255 || number < -255)
-	{
-		error = error.append("bite number range is from -255 to 255");
-		return -1;
-	}
-
-	if (rotationCount > 8 || rotationCount < 0)
-	{
-		error = error.append("bit count in bite is is from 0 to 8");
-		return -1;
-	}
-
-	for (int i = 0; i < rotationCount; i++)
-	{
-		number = (direction == 'R') ? number >> 1 : number << 1;
-	}
-	
-	return number;
 }
 
-int main(int argc, char * argv[])
+uint8_t RotateByte(uint8_t byte, unsigned bits, const RotationDirection direction)
 {
-	string errorMessage = "";
+	for (int i = 0; i != bits; ++i)
+	{
+		if (direction == RotationDirection::RIGHT)
+		{
+			if ((byte & 1) != 0)
+			{
+				byte >>= 1;
+				byte |= 128;
+			}
+			else
+				byte >>= 1;
+		}
+		if (direction == RotationDirection::LEFT)
+		{
+			if ((byte & 128) != 0)
+			{
+				byte <<= 1;
+				byte |= 1;
+			}
+			else
+				byte <<= 1;
+		}
+	}
+	return byte;
+}
 
+int main(int argc, char *argv[])
+{
 	if (argc != 4)
 	{
 		cout << "Invalid arguments count\n"
 			<< "Usage: rotatebyte.exe <byte> <number of bits> <L / R>\n";
 		return 1;
+	}
+
+	unsigned byte, bits;
+
+	try
+	{
+		byte = stoi(argv[1]);
+	}
+	catch (const invalid_argument &error)
+	{
+		cout << "Enter a valid integer number for <bite>" << endl;
+		return 1;
 	}	
 
-	int result = RotateNumber(argv[1], argv[2], argv[3], errorMessage);
-
-	if (result == BITE_ROTATE_ERROR)
+	try
 	{
-		cout << errorMessage << "\n";
+		bits = stoi(argv[2]);
+	}
+	catch (const invalid_argument &error)
+	{
+		cout << "Enter a valid integer number for  <number of bits>" << endl;
 		return 1;
 	}
-	else
+
+	if ((byte < 0) || (byte > 255))
 	{
-		cout << result;
+		cout << "bite number range is from 0 to 255" << endl;
+		return 1;
+	}	
+
+	if (bits > 8 || bits < 0)
+	{
+		cout << "bit count in bite is is from 0 to 8" << endl;
+		return 1;
 	}
+
+	string rotationWay = argv[3];
+	RotationDirection direction = GetRotateDirection(rotationWay);
+	
+	if (direction != RotationDirection::RIGHT && direction != RotationDirection::LEFT)
+	{
+		cout << "Enter a valid direction, uppercase - L for left, or R for right" << endl;
+		return 1;
+	}	
+
+	byte = RotateByte(byte, bits, direction);
+	cout << byte << endl;
 
 	return 0;
 }
-

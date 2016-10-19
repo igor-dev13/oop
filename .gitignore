@@ -3,3 +3,6 @@
 /lab1/rotatebyte/Debug
 /lab1/compare/ipch/COMPARE-2a9b20ee
 /lab1/rotatebyte/ipch/ROTATEBYTE-7c9d0503
+*.opendb
+*.db
+*.suo
