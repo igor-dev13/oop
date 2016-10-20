@@ -6,3 +6,12 @@
 *.opendb
 *.db
 *.suo
+*.tlog
+*.pdb
+*.obj
+*.exe
+*.ilk
+*.ipch
+*.idb
+*.log
+*.pch
