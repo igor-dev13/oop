@@ -34,20 +34,12 @@ BOOST_AUTO_TEST_SUITE(ProcessVector_function)
 
 	// при обработке вектора 
 	BOOST_AUTO_TEST_SUITE(vector_with_elements)
-	// добавление среднего арифметического к каждому элементу
+	// умножение каждого элемента в векторе на минимальный элемент
 	BOOST_AUTO_TEST_CASE(adding_the_arithmetic_average_of_each_element)
 	{
 		vector<double> numbers = { -9, 1, 7, 13 };
 		ProcessVector(numbers);
 		BOOST_CHECK(VectorsAreEqual(numbers, { 81, -9, -63, -117 }));		
-	}
-
-	// Создание и проверка пустого вектора
-	BOOST_AUTO_TEST_CASE(makes_empty_vector_from_empty_vector)
-	{
-		vector<double> emptyVector;
-		ProcessVector(emptyVector);
-		BOOST_CHECK(emptyVector.empty());
 	}
 	BOOST_AUTO_TEST_SUITE_END()
 
