@@ -9,7 +9,7 @@ bool VectorsAreEqual(vector<double> const& x, vector<double> const& y)
 }
 
 // Function SortVector
-BOOST_AUTO_TEST_SUITE(GetMinElement_function)
+BOOST_AUTO_TEST_SUITE(SortVector_function)
 
 	// проверка функции сортировки элементов вектора
 	BOOST_AUTO_TEST_CASE(sort_vector_elements)
