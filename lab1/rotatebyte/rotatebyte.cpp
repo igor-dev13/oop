@@ -6,6 +6,7 @@ using namespace std;
 
 enum class RotationDirection
 {
+	NONE,
 	LEFT,
 	RIGHT
 };
@@ -20,33 +21,32 @@ RotationDirection GetRotateDirection(const string &choice)
 	{
 		return RotationDirection::LEFT;
 	}
+	else
+	{
+		return RotationDirection::NONE;
+	}
 }
 
 uint8_t RotateByte(uint8_t byte, unsigned bits, const RotationDirection direction)
 {
-	for (int i = 0; i != bits; ++i)
+	bits %= 8;
+
+	switch (direction)
 	{
-		if (direction == RotationDirection::RIGHT)
+		case RotationDirection::RIGHT:
 		{
-			if ((byte & 1) != 0)
-			{
-				byte >>= 1;
-				byte |= 128;
-			}
-			else
-				byte >>= 1;
+			byte = (byte >> bits) | (byte << (8 - bits));
+			byte &= 255;
+			break;
 		}
-		if (direction == RotationDirection::LEFT)
+		case RotationDirection::LEFT:
 		{
-			if ((byte & 128) != 0)
-			{
-				byte <<= 1;
-				byte |= 1;
-			}
-			else
-				byte <<= 1;
+			byte = (byte << bits) | (byte >> (8 - bits));
+			byte &= 255;
+			break;
 		}
 	}
+
 	return byte;
 }
 
@@ -65,7 +65,7 @@ int main(int argc, char *argv[])
 	{
 		byte = stoi(argv[1]);
 	}
-	catch (const invalid_argument &error)
+	catch (const invalid_argument)
 	{
 		cout << "Enter a valid integer number for <bite>" << endl;
 		return 1;
@@ -75,7 +75,7 @@ int main(int argc, char *argv[])
 	{
 		bits = stoi(argv[2]);
 	}
-	catch (const invalid_argument &error)
+	catch (const invalid_argument)
 	{
 		cout << "Enter a valid integer number for  <number of bits>" << endl;
 		return 1;
