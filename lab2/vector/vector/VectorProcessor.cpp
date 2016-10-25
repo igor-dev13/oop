@@ -22,14 +22,5 @@ void ProcessVector(vector<double> & numbers)
 	
 	double minElem = *min_element(numbers.begin(), numbers.end());
 
-	for (int i = 0; i < numbers.size(); ++i)
-	{
-		numbers[i] *= minElem;
-	}			
+	std::transform(numbers.begin(), numbers.end(), numbers.begin(), arg1 * minElem);
 }
-
-void SortVector(vector<double> & numbers)
-{
-	sort(numbers.begin(), numbers.end());
-}
-

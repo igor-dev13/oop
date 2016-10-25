@@ -14,7 +14,7 @@ int _tmain()
 
 	ProcessVector(numbers);
 
-	SortVector(numbers);
+	sort(numbers.begin(), numbers.end());
 
 	copy(numbers.begin(), numbers.end(), ostream_iterator<double>(cout, ", "));
 

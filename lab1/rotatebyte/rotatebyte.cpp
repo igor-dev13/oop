@@ -87,12 +87,6 @@ int main(int argc, char *argv[])
 		return 1;
 	}	
 
-	if (bits > 8 || bits < 0)
-	{
-		cout << "bit count in bite is is from 0 to 8" << endl;
-		return 1;
-	}
-
 	string rotationWay = argv[3];
 	RotationDirection direction = GetRotateDirection(rotationWay);
 	
