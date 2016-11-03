@@ -8,7 +8,7 @@ enum class RotationDirection
 {
 	NONE,
 	LEFT,
-	RIGHT
+	RIGHT 
 };
 
 RotationDirection GetRotateDirection(const string &choice)

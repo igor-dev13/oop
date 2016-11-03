@@ -1,0 +1,10 @@
+cat
+кошка
+hello
+привет
+test
+тест
+привет
+privet
+привет сосед
+hi neighbor
