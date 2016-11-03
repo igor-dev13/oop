@@ -36,13 +36,13 @@ uint8_t RotateByte(uint8_t byte, unsigned bits, const RotationDirection directio
 		case RotationDirection::RIGHT:
 		{
 			byte = (byte >> bits) | (byte << (8 - bits));
-			byte &= 255;
+			//byte &= 255;
 			break;
 		}
 		case RotationDirection::LEFT:
 		{
 			byte = (byte << bits) | (byte >> (8 - bits));
-			byte &= 255;
+			//byte &= 255;
 			break;
 		}
 	}
