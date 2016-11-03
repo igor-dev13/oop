@@ -7,13 +7,13 @@ string ChangeEntity(string const &text,  string const &searchStr,  string const 
 {
 	string resultStr;
 	size_t startPosition = 0;
-	size_t matchEndPosition = text.find(searchStr);
+	size_t endPosition = text.find(searchStr);
 
-	while (matchEndPosition != string::npos)
+	while (endPosition != string::npos)
 	{
-		resultStr += text.substr(startPosition, matchEndPosition - startPosition) + replaceStr;
-		startPosition = matchEndPosition + searchStr.length();
-		matchEndPosition = text.find(searchStr, startPosition);
+		resultStr += text.substr(startPosition, endPosition - startPosition) + replaceStr;
+		startPosition = endPosition + searchStr.length();
+		endPosition = text.find(searchStr, startPosition);
 	}
 
 	return resultStr += text.substr(startPosition);
