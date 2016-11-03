@@ -12,38 +12,6 @@ void SerializeDictionary(Dictionary &dictionary, istream &dictionaryFile)
 	}
 }
 
-void MakeDictionary(Dictionary &dictionary, istream &input, string const &dictionaryName)
-{
-	const string PROGRAM_EXIT = "...";
-
-	bool setNewWords = false;
-	string inputTranslation;
-	cout << ">";
-
-	while (getline(input, inputTranslation) && (inputTranslation != PROGRAM_EXIT))
-	{
-		if (!inputTranslation.empty())
-		{
-			bool haveTranslation = (dictionary.find(inputTranslation) != dictionary.end());
-			if (haveTranslation)
-			{
-				cout << dictionary.find(inputTranslation)->second << "\n";
-			}
-			else
-			{
-				SaveNewTranslation(dictionary, input, inputTranslation, setNewWords);
-			}
-		}
-
-		cout << ">";
-	}
-
-	if (setNewWords)
-	{
-		UpdateDictionary(dictionary, input, dictionaryName);
-	}
-}
-
 void SaveNewTranslation(Dictionary &dictionary, istream &input, string const &inputTranslation, bool &setNewWords)
 {
 	cout << "Неизвестное слово '" << inputTranslation << "' Введите перевод или пустую строку для отказа.\n";
@@ -85,5 +53,37 @@ void UpdateDictionary(Dictionary &dictionary, istream &input, string const &dict
 
 		dictionaryFileOut.close();
 		cout << "Изменения сохранены. До свидания.";
+	}
+}
+
+void MakeDictionary(Dictionary &dictionary, istream &input, string const &dictionaryName)
+{
+	const string PROGRAM_EXIT = "...";
+
+	bool setNewWords = false;
+	string inputTranslation;
+	cout << ">";
+
+	while (getline(input, inputTranslation) && (inputTranslation != PROGRAM_EXIT))
+	{
+		if (!inputTranslation.empty())
+		{
+			bool haveTranslation = (dictionary.find(inputTranslation) != dictionary.end());
+			if (haveTranslation)
+			{
+				cout << dictionary.find(inputTranslation)->second << "\n";
+			}
+			else
+			{
+				SaveNewTranslation(dictionary, input, inputTranslation, setNewWords);
+			}
+		}
+
+		cout << ">";
+	}
+
+	if (setNewWords)
+	{
+		UpdateDictionary(dictionary, input, dictionaryName);
 	}
 }
