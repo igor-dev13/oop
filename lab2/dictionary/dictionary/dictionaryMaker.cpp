@@ -14,9 +14,8 @@ void SerializeDictionary(Dictionary &dictionary, istream &dictionaryFile)
 
 void SaveNewTranslation(Dictionary &dictionary, istream &input, string const &inputTranslation, bool &setNewWords)
 {
-	cout << "Неизвестное слово '" << inputTranslation << "' Введите перевод или пустую строку для отказа.\n";
 	string translation;
-	cout << ">";
+	cout << "Неизвестное слово '" << inputTranslation << "' Введите перевод или пустую строку для отказа.\n>";	
 	getline(input, translation);
 
 	if (translation != "")
@@ -37,9 +36,8 @@ void AddNewTranslation(Dictionary &dictionary, string const &inputTranslation, s
 
 void UpdateDictionary(Dictionary &dictionary, istream &input, string const &dictionaryName)
 {
-	cout << "В словарь были внесены изменения.Введите Y или y для сохранения перед выходом.\n";
 	string saveParametr;
-	cout << ">";
+	cout << "В словарь были внесены изменения.Введите Y или y для сохранения перед выходом.\n>";	
 	input >> saveParametr;
 
 	if (saveParametr == "Y" || saveParametr == "y")
@@ -59,7 +57,6 @@ void UpdateDictionary(Dictionary &dictionary, istream &input, string const &dict
 void MakeDictionary(Dictionary &dictionary, istream &input, string const &dictionaryName)
 {
 	const string PROGRAM_EXIT = "...";
-
 	bool setNewWords = false;
 	string inputTranslation;
 	cout << ">";
