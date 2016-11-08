@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
 VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "decode", "dictionary\dictionary.vcxproj", "{C476B26E-8D2F-4005-B1E8-F5BEFB0E3D0D}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "dictionary", "dictionary\dictionary.vcxproj", "{C476B26E-8D2F-4005-B1E8-F5BEFB0E3D0D}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "dictionaryTest", "dictionaryTest\dictionaryTest.vcxproj", "{48F2D69F-6C30-4341-8DFA-5BE5E2B6E95E}"
 EndProject

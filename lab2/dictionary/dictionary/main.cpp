@@ -1,5 +1,5 @@
 ﻿#include "stdafx.h"
-#include "dictionaryMaker.h"
+#include "dictionaryProcessor.h"
 
 using namespace std;
 
@@ -15,22 +15,22 @@ int main(int argc, char * argv[])
 		return 1;
 	}
 	
-	string dictionaryFileIn = argv[1];
-	ifstream dictionaryFile(dictionaryFileIn);
+	string dictionaryFileInput = argv[1];
 	Dictionary dictionary;
+	ifstream dictionaryInput(dictionaryFileInput);
 
-	if (dictionaryFile.is_open())
+	if (dictionaryInput.is_open())
 	{
-		SerializeDictionary(dictionary, dictionaryFile);
-		dictionaryFile.close();
+		SerializeDictionary(dictionary, dictionaryInput);
+		dictionaryInput.close();
 	}
 	else
 	{
-		cout << "Failed to open " << dictionaryFileIn << "for process\n";		
+		cout << "Can't process " << dictionaryFileInput << " for open";
 	}
 
 	stringstream input;
-	MakeDictionary(dictionary, cin, dictionaryFileIn);
+	ProcessDictionary(dictionary, cin, dictionaryFileInput);
 
 	return 0;
 }

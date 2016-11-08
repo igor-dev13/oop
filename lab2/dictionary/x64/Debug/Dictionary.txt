@@ -1,10 +1,10 @@
-cat
-кошка
+ 
+   
+hekko
+хук
 hello
 привет
-test
-тест
-привет
-privet
-привет сосед
-hi neighbor
+привет2
+hello2
+привет3
+hello3
