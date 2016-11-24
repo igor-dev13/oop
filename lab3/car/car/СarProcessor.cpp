@@ -143,7 +143,7 @@ bool CarProcessor::TurnOffEngine()
 	}
 	else
 	{
-		m_output << "It is impossible to turn off the engine" << endl;
+		m_output << "The engine is already switched off" << endl;
 	}
 
 	return result;

@@ -40,6 +40,11 @@ struct CarProcessorFixture : CarProcessorDependencies
 
 BOOST_FIXTURE_TEST_SUITE(CarProcessorTest, CarProcessorFixture)
 
+	BOOST_AUTO_TEST_CASE(can_handle_unknown_command)
+	{
+		CheckCommandHandling("helloCar", "Unknown command\n");
+	}
+
 	BOOST_AUTO_TEST_CASE(can_turn_on_engine)
 	{
 		CheckCommandHandling("EngineOn", "Car engine is switched on\n");
@@ -48,6 +53,21 @@ BOOST_FIXTURE_TEST_SUITE(CarProcessorTest, CarProcessorFixture)
 	BOOST_AUTO_TEST_CASE(can_print_errors)
 	{
 		CheckCommandHandling("SetGear 1", "Car engine is turned off\n");
+	}
+
+	BOOST_AUTO_TEST_CASE(can_print_result_of_changing_car_status)
+	{
+		CheckCommandHandling("EngineOff", "The engine is already switched off\n");
+
+		car.TurnOnEngine();
+		CheckCommandHandling("EngineOn", "Car engine is already switched on\n");
+
+		CheckCommandHandling("SetGear 1", "selected gear 1\n");
+		CheckCommandHandling("SetGear 3", "gear didn't change\n");
+
+		CheckCommandHandling("SetSpeed 20", "selected speed 20\n");
+		CheckCommandHandling("SetGear 2", "selected gear 2\n");
+		CheckCommandHandling("SetSpeed 30", "selected speed 30\n");
 	}
 
 	BOOST_AUTO_TEST_CASE(can_handle_Info_command)
