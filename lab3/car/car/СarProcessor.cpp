@@ -4,8 +4,9 @@
 using namespace std;
 using namespace std::placeholders;
 
-CarProcessor::CarProcessor(CCar & car)
+CarProcessor::CarProcessor(CCar & car, std::ostream &output)
 	: m_car(car)
+	, m_output(output)
 {
 }
 
@@ -49,20 +50,6 @@ string GearToString(const Gear & gear)
 	}
 }
 
-bool IsNumber(const string & str)
-{
-	try
-	{
-		return all_of(str.begin(), str.end(), isdigit);
-	}
-	catch (exception & exception)
-	{
-		cout << "second argument is not a number" << endl;
-		cout << exception.what() << endl;
-		return false;
-	}	
-}
-
 bool CarProcessor::HandleCommand(string & command)
 {
 	boost::to_lower(command);
@@ -92,12 +79,12 @@ bool CarProcessor::HandleCommand(string & command)
 		}
 		else
 		{
-			cout << "Unknown command" << endl;
+			m_output << "Unknown command" << endl;
 		}	
 	}
 	else
 	{
-		cout << "Unknown command" << endl;
+		m_output << "Unknown command" << endl;
 	}
 
 	return true;
@@ -136,11 +123,11 @@ bool CarProcessor::TurnOnEngine()
 
 	if (result)
 	{
-		cout << "Car engine is switched on" << endl;
+		m_output << "Car engine is switched on" << endl;
 	}
 	else 
 	{
-		cout << "Car engine is already switched on" << endl;
+		m_output << "Car engine is already switched on" << endl;
 	}
 	
 	return result;
@@ -152,11 +139,11 @@ bool CarProcessor::TurnOffEngine()
 
 	if (result)
 	{
-		cout << "Car engine is switched off" << endl;
+		m_output << "Car engine is switched off" << endl;
 	}
 	else
 	{
-		cout << "It is impossible to turn off the engine" << endl;
+		m_output << "It is impossible to turn off the engine" << endl;
 	}
 
 	return result;
@@ -166,7 +153,7 @@ bool CarProcessor::SetGear(int gear)
 {
 	if (!m_car.GetEngineStatus())
 	{
-		cout << "Car engine is turned off" << endl;
+		m_output << "Car engine is turned off" << endl;
 		return false;
 	}
 
@@ -176,18 +163,18 @@ bool CarProcessor::SetGear(int gear)
 		bool result = m_car.SetGear(carGear);
 		if (result)
 		{
-			cout << "selected gear " << gear << endl;
+			m_output << "selected gear " << gear << endl;
 		}
 		else
 		{
-			cout << "gear didn't change" << endl;
+			m_output << "gear didn't change" << endl;
 		}
 		return result;
 	}
 	catch (exception & exception)
 	{
-		cout << "gear didn't change" << endl;
-		cout << exception.what() << endl;
+		m_output << "gear didn't change" << endl;
+		m_output << exception.what() << endl;
 		return false;
 	}
 }
@@ -196,18 +183,18 @@ bool CarProcessor::SetSpeed(int speed)
 {
 	if (!m_car.GetEngineStatus())
 	{
-		cout << "engine is turn off" << endl;
+		m_output << "engine is turn off" << endl;
 		return false;
 	}
 
 	bool result = m_car.SetSpeed(speed);
 	if (result)
 	{
-		cout << "selected speed " << speed << endl;
+		m_output << "selected speed " << speed << endl;
 	}
 	else
 	{
-		cout << "speed didn't changed" << endl;
+		m_output << "speed didn't changed" << endl;
 	}
 
 	return result;	
@@ -215,8 +202,8 @@ bool CarProcessor::SetSpeed(int speed)
 
 void CarProcessor::GetInfo(const CCar & car)
 {
-	cout << "Engine status: " << ((car.GetEngineStatus()) ? ("turned on") : ("turned off")) << endl;
-	cout << "Speed: " << car.GetSpeed() << endl;
-	cout << "Direction: " << DirectionToString(car.GetDirection()).c_str() << endl;
-	cout << "Gear: " << GearToString(car.GetGear()).c_str() << endl;
+	m_output << "Engine status: " << ((car.GetEngineStatus()) ? ("turned on") : ("turned off")) << endl;
+	m_output << "Speed: " << car.GetSpeed() << endl;
+	m_output << "Direction: " << DirectionToString(car.GetDirection()).c_str() << endl;
+	m_output << "Gear: " << GearToString(car.GetGear()).c_str() << endl;
 }

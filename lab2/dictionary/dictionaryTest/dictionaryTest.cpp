@@ -2,12 +2,11 @@
 #include "../dictionary/dictionaryProcessor.h"
 #include <sstream>
 #include <boost/test/output_test_stream.hpp>
-#include <iostream>
 
 using namespace std;
 BOOST_AUTO_TEST_SUITE(serialize_dictionary_function)
 
-	BOOST_AUTO_TEST_CASE(should_serialize_dictionary_map_from_existing_file)
+	BOOST_AUTO_TEST_CASE(should_serialize_dictionary_from_existing_file)
 	{
 		ifstream dictionaryFile("testTextFile.txt");
 		map<string, string> dictionary;
@@ -24,7 +23,7 @@ BOOST_AUTO_TEST_SUITE(get_translation_function)
 	{
 		map<string, string> tempDictionary = { { "man", "человек" },{ "girl", "девушка" },{ "phone", "телефон" } };
 		string translation = GetTranslation(tempDictionary, "man");
-		BOOST_CHECK((translation == "человек"));
+		BOOST_CHECK((translation == "человек"));		
 	}
 
 BOOST_AUTO_TEST_SUITE_END()

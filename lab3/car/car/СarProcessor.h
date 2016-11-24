@@ -4,7 +4,8 @@
 class CarProcessor
 {
 public:
-	CarProcessor(CCar & car);
+	std::ostream & m_output;	
+	CarProcessor(CCar & car, std::ostream &output);
 	~CarProcessor();
 	bool TurnOnEngine();
 	bool TurnOffEngine();
@@ -14,5 +15,5 @@ public:
 	Gear IntToGear(const int gear);
 	void GetInfo(const CCar & car);
 private:
-	CCar & m_car;
+	CCar & m_car;	
 };

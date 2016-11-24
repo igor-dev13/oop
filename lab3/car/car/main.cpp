@@ -7,7 +7,7 @@ using namespace std;
 int main(int, char *[])
 {
 	CCar car;
-	CarProcessor CarProcessor(car);
+	CarProcessor CarProcessor(car, cout);
 
 	string action;
 	cout << endl << ">";
