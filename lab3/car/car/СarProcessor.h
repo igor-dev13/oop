@@ -4,7 +4,8 @@
 class CarProcessor
 {
 public:
-	std::ostream & m_output;	
+	std::ostream & m_output;
+public:	
 	CarProcessor(CCar & car, std::ostream &output);
 	~CarProcessor();
 	bool TurnOnEngine();

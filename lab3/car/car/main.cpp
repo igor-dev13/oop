@@ -6,7 +6,7 @@ using namespace std;
 
 int main(int, char *[])
 {
-	CCar car;
+	CCar car(cout);
 	CarProcessor CarProcessor(car, cout);
 
 	string action;

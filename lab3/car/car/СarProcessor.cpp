@@ -73,7 +73,7 @@ bool CarProcessor::HandleCommand(string & command)
 		{
 			SetGear(stoi(commands[1]));
 		}
-		else if ((commands[0] == "setspeed") && (stoi(commands[1]) >= 0))
+		else if ((commands[0] == "setspeed") && (stoi(commands[1]) >= -20))
 		{
 			SetSpeed(stoi(commands[1]));
 		}
@@ -118,45 +118,17 @@ Gear CarProcessor::IntToGear(const int gear)
 }
 
 bool CarProcessor::TurnOnEngine()
-{
-	bool result = m_car.TurnOnEngine();
-
-	if (result)
-	{
-		m_output << "Car engine is switched on" << endl;
-	}
-	else 
-	{
-		m_output << "Car engine is already switched on" << endl;
-	}
-	
-	return result;
+{	
+	return m_car.TurnOnEngine();
 }
 
 bool CarProcessor::TurnOffEngine()
 {
-	bool result = m_car.TurnOffEngine();
-
-	if (result)
-	{
-		m_output << "Car engine is switched off" << endl;
-	}
-	else
-	{
-		m_output << "The engine is already switched off" << endl;
-	}
-
-	return result;
+	return m_car.TurnOffEngine();
 }
 
 bool CarProcessor::SetGear(int gear)
 {
-	if (!m_car.GetEngineStatus())
-	{
-		m_output << "Car engine is turned off" << endl;
-		return false;
-	}
-
 	try
 	{
 		Gear carGear = IntToGear(gear);
@@ -165,15 +137,11 @@ bool CarProcessor::SetGear(int gear)
 		{
 			m_output << "selected gear " << gear << endl;
 		}
-		else
-		{
-			m_output << "gear didn't change" << endl;
-		}
+
 		return result;
 	}
 	catch (exception & exception)
 	{
-		m_output << "gear didn't change" << endl;
 		m_output << exception.what() << endl;
 		return false;
 	}
@@ -181,20 +149,10 @@ bool CarProcessor::SetGear(int gear)
 
 bool CarProcessor::SetSpeed(int speed)
 {
-	if (!m_car.GetEngineStatus())
-	{
-		m_output << "engine is turn off" << endl;
-		return false;
-	}
-
 	bool result = m_car.SetSpeed(speed);
 	if (result)
 	{
 		m_output << "selected speed " << speed << endl;
-	}
-	else
-	{
-		m_output << "speed didn't changed" << endl;
 	}
 
 	return result;	
@@ -202,8 +160,8 @@ bool CarProcessor::SetSpeed(int speed)
 
 void CarProcessor::GetInfo(const CCar & car)
 {
-	m_output << "Engine status: " << ((car.GetEngineStatus()) ? ("turned on") : ("turned off")) << endl;
-	m_output << "Speed: " << car.GetSpeed() << endl;
+	m_output << "Engine status: " << ((car.IsEngineOn()) ? ("switched on") : ("switched off")) << endl;
+	m_output << "Speed: " << (car.GetSpeed() < 0 ? -car.GetSpeed() : car.GetSpeed()) << endl;
 	m_output << "Direction: " << DirectionToString(car.GetDirection()).c_str() << endl;
 	m_output << "Gear: " << GearToString(car.GetGear()).c_str() << endl;
 }

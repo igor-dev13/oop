@@ -3,116 +3,146 @@
 
 using namespace std;
 
-CCar::CCar()
-	: m_gearMap({
-		{ Gear::REVERSE, bind(&CCar::SetSpeedRange, this, reverseRangeStart, reverseRangeEnd) },
-		{ Gear::FIRST, bind(&CCar::SetSpeedRange, this, firstRangeStart, firstRangeEnd) },
-		{ Gear::SECOND, bind(&CCar::SetSpeedRange, this, secondRangeStart, secondRangeEnd) },
-		{ Gear::THIRD, bind(&CCar::SetSpeedRange, this, thirdRangeStart, thirdRangeEnd) },
-		{ Gear::FOURTH, bind(&CCar::SetSpeedRange, this, fourthRangeStart, fourthRangeEnd) },
-		{ Gear::FIFTH, bind(&CCar::SetSpeedRange, this, fifthRangeStart, fifthRangeEnd) }
-	})
+static const vector<pair<int, int>> gearMap = {
+	{ -20, 0 },
+	{ 0, 30 },
+	{ 20, 50 },
+	{ 30, 60 },
+	{ 40, 90 },
+	{ 50, 150 }
+};
+
+CCar::CCar(std::ostream &output)
+	: m_output(output)
 {
 }
 
 CCar::~CCar() = default;
 
-bool CCar::SetSpeedRange(int gearSpeedRangeFrom, int gearSpeedRangeTo)
-{
-	m_gearRange.clear();
-	std::vector<int>::iterator it;
-
-	for (int i = gearSpeedRangeFrom; i <= gearSpeedRangeTo; i++)
-	{
-		m_gearRange.push_back(i);
-	}
-
-	return true;
-}
-
-bool CCar::CheckSpeedRange(Gear gear)
-{
-	auto it = m_gearMap.find(gear);
-	if (it != m_gearMap.end())
-	{
-		it->second(m_speed, m_speed);
-		return true;
-	}
-
-	return false;
-}
-
 bool CCar::TurnOnEngine()
 {
-	if (!GetEngineStatus())
+	if (!IsEngineOn())
 	{
 		m_isEngineOn = true;
+		m_output << "Car engine is switched on" << endl;
 		return true;
 	}
 
-	return false;		
+	m_output << "Car engine is already switched on" << endl;
+	return false;
 }
 
 bool CCar::TurnOffEngine()
 {
-	if (GetEngineStatus() && m_gear == Gear::NEUTRAL && m_speed == 0)
+	if (m_speed > 0)
+	{
+		m_output << "The engine is already switched off" << endl;
+		return false;
+	}
+
+	if (IsEngineOn() && m_gear == Gear::NEUTRAL && m_speed == 0)
 	{
 		m_isEngineOn = false;
+		m_output << "Car engine is switched off" << endl;
 		return true;
 	}
 
-	return false;	
+	m_output << "The engine is already switched off" << endl;
+	return false;
 }
 
 bool CCar::SetGear(Gear selectedGear)
-{	
-	if (selectedGear == Gear::REVERSE && (GetDirection() == Direction::FORWARD))
+{
+	if (IsEngineOn())
 	{
-		return false;
-	}
+		if (selectedGear == Gear::REVERSE)
+		{
+			if (m_gear == Gear::REVERSE || ((m_gear == Gear::FIRST || m_gear == Gear::NEUTRAL) && (m_speed == 0)))
+			{
+				m_gear = selectedGear;
+				return true;
+			}
 
-	if (((selectedGear == Gear::FIRST) || (selectedGear == Gear::SECOND)) && (GetDirection() == Direction::BACK))
-	{
-		return false;
-	}
-
-	if (selectedGear != Gear::NEUTRAL)
-	{
-		bool processNewGear = CheckSpeedRange(selectedGear);
-
-		if (!processNewGear)
+			m_output << "Gear can't be set to reverse, car is in other direction" << endl;
 			return false;
-	}	
+		}
 
-	bool gearInSpeedRange = std::find(std::begin(m_gearRange), std::end(m_gearRange), m_speed) != std::end(m_gearRange);
+		if (selectedGear == Gear::NEUTRAL)
+		{
+			previousGear = m_gear;
+			m_gear = selectedGear;
+			return true;
+		}
 
-	if (selectedGear == Gear::NEUTRAL || gearInSpeedRange)
+		if (selectedGear > Gear::NEUTRAL && selectedGear <= Gear::FIFTH)
+		{
+			if (m_speed < 0)
+			{
+				m_output << "Gear can't be set, car is moving back" << endl;
+				return false;
+			}
+
+			if (m_speed >= gearMap[static_cast<int>(selectedGear)].first && m_speed <= gearMap[static_cast<int>(selectedGear)].second)
+			{
+				m_gear = selectedGear;
+				return true;
+			}
+
+			m_output << "Gear can't be set. Gear is out of speed range" << endl;
+			return false;
+		}
+
+	}
+	else if (!IsEngineOn() && selectedGear == Gear::NEUTRAL)
 	{
 		m_gear = selectedGear;
 		return true;
 	}
-	
+	else 
+	{
+		m_output << "Gear didn't change. Only neutral gear can be set when engine is turned off" << endl;
+		return false;
+	}
+
+	m_output << "Gear didn't change" << endl;
 	return false;
 }
 
 bool CCar::SetSpeed(int speed)
 {
-	if (m_gear != Gear::NEUTRAL)
+	Gear sign;
+	if (IsEngineOn())
 	{
-		bool processCurrentGearRange = CheckSpeedRange(GetGear());
-		
-		if (!processCurrentGearRange)
-			return false;
-	}		
-	
-	bool speedInGearRange = std::find(std::begin(m_gearRange), std::end(m_gearRange), speed) != std::end(m_gearRange);
+		if (m_gear == Gear::NEUTRAL)
+		{
+			if ((speed > m_speed && m_speed > 0) || ((m_speed >= -20) && speed < 0))
+			{
+				m_output << "Speed can't be set. Can't increase speed in neutral gear" << endl;
+				return false;
+			}			
+		}
 
-	if (speedInGearRange || (m_gear == Gear::NEUTRAL && speed == 0))
+		speed = m_gear == Gear::REVERSE ? -speed : speed;
+		sign = m_gear == Gear::REVERSE ? Gear::NEUTRAL : m_gear;
+
+		if (speed >= gearMap[static_cast<int>(sign)].first && speed <= gearMap[static_cast<int>(sign)].second)
+		{
+			m_speed = speed;
+			return true;
+		}
+		else 
+		{
+			m_output << "Speed can't be set. Speed is out of gear range" << endl;
+			return false;
+		}
+	}
+	else
 	{
-		m_speed = speed;
-		return true;
+		m_output << "Speed can't be set when engine is turned off" << endl;
+		return false;
 	}
 
+	m_output << "Speed didn't change" << endl;
 	return false;
 }
 
@@ -123,10 +153,15 @@ Gear CCar::GetGear() const
 
 int CCar::GetSpeed() const
 {
+	if (m_speed < 0)
+	{
+		return -m_speed;
+	}
+
 	return m_speed;
 }
 
-bool CCar::GetEngineStatus() const
+bool CCar::IsEngineOn() const
 {
 	return m_isEngineOn;
 }
@@ -141,13 +176,17 @@ Direction CCar::GetDirection() const
 	{
 		return Direction::BACK;
 	}
+	else if (m_gear == Gear::NEUTRAL && previousGear != Gear::NEUTRAL)
+	{
+		if (previousGear == Gear::REVERSE)
+		{
+			return Direction::BACK;
+		}
+		
+		return Direction::FORWARD;
+	}
 	else
 	{
 		return Direction::FORWARD;
 	}
-}
-
-bool CCar::operator==(const CCar & car)
-{
-	return (m_isEngineOn == car.m_isEngineOn) && (m_speed == car.m_speed) && (m_gear == car.m_gear);
 }
