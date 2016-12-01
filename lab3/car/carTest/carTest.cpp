@@ -248,6 +248,13 @@ BOOST_FIXTURE_TEST_SUITE(Car, CarFixture)
 			CheckCarState(Gear::REVERSE, 20, Direction::BACK);
 			CantSetGear(Gear::FIRST);
 		}
+		BOOST_AUTO_TEST_CASE(car_must_not_change_direction_when_switch_to_a_neutral_gear_on_back_direction)
+		{
+			CanSetSpeed(20);
+			CheckCarState(Gear::REVERSE, 20, Direction::BACK);
+			CanSetGear(Gear::NEUTRAL);
+			CheckCarState(Gear::NEUTRAL, 20, Direction::BACK);
+		}
 	BOOST_AUTO_TEST_SUITE_END()
 
 	struct second_gear_is_switched_on_ : first_gear_is_switched_on_
