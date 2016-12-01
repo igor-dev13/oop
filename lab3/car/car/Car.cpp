@@ -103,9 +103,6 @@ bool CCar::SetGear(Gear selectedGear)
 		m_output << "Gear didn't change. Only neutral gear can be set when engine is turned off" << endl;
 		return false;
 	}
-
-	m_output << "Gear didn't change" << endl;
-	return false;
 }
 
 bool CCar::SetSpeed(int speed)
