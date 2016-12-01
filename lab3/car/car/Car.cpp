@@ -173,14 +173,9 @@ Direction CCar::GetDirection() const
 	{
 		return Direction::BACK;
 	}
-	else if (m_gear == Gear::NEUTRAL && previousGear != Gear::NEUTRAL)
-	{
-		if (previousGear == Gear::REVERSE)
-		{
-			return Direction::BACK;
-		}
-		
-		return Direction::FORWARD;
+	else if (m_gear == Gear::NEUTRAL && previousGear == Gear::REVERSE)
+	{		
+		return Direction::BACK;
 	}
 	else
 	{
