@@ -78,20 +78,20 @@ BOOST_FIXTURE_TEST_SUITE(Car, CarFixture)
 
 
 	BOOST_AUTO_TEST_SUITE(engine_is_switched_off)
-		BOOST_AUTO_TEST_CASE(engine_turned_off)
+		BOOST_AUTO_TEST_CASE(engine_must_have_turned_off_emgine)
 		{
 			BOOST_CHECK(!car.IsEngineOn());
 			CheckCarState(Gear::NEUTRAL, 0, Direction::STOP);
 		}
-		BOOST_AUTO_TEST_CASE(gear_is_neutral_when_engine_turned_off)
+		BOOST_AUTO_TEST_CASE(gear_must_have_neutral_when_engine_turned_off)
 		{
 			BOOST_CHECK(car.GetGear() == Gear::NEUTRAL);
 		}
-		BOOST_AUTO_TEST_CASE(has_stop_direction_when_engine_turned_off)
+		BOOST_AUTO_TEST_CASE(car_must_have_stop_direction_when_engine_turned_off)
 		{
 			BOOST_CHECK(car.GetDirection() == Direction::STOP);
 		}
-		BOOST_AUTO_TEST_CASE(has_zero_speed_when_engine_turned_off)
+		BOOST_AUTO_TEST_CASE(car_must_have_zero_speed_when_engine_turned_off)
 		{
 			BOOST_CHECK(car.GetSpeed() == 0);
 		}
@@ -116,7 +116,7 @@ BOOST_FIXTURE_TEST_SUITE(Car, CarFixture)
 	};
 
 	BOOST_FIXTURE_TEST_SUITE(engine_is_switched_on, engine_switched_on_)
-		BOOST_AUTO_TEST_CASE(has_zero_speed_when_engine_is_switched_on)
+		BOOST_AUTO_TEST_CASE(car_must_have_zero_speed_when_engine_is_switched_on)
 		{
 			BOOST_CHECK(car.GetSpeed() == 0);
 		}
@@ -124,15 +124,15 @@ BOOST_FIXTURE_TEST_SUITE(Car, CarFixture)
 		{
 			CantSetSpeed(10);
 		}
-		BOOST_AUTO_TEST_CASE(has_no_direction_when_engine_is_switched_on)
+		BOOST_AUTO_TEST_CASE(car_must_have_no_direction_when_engine_is_switched_on)
 		{
 			BOOST_CHECK(car.GetDirection() == Direction::STOP);
 		}
-		BOOST_AUTO_TEST_CASE(car_is_in_neutral_gear_when_engine_is_switched_on)
+		BOOST_AUTO_TEST_CASE(car_must_have_neutral_gear_when_engine_is_switched_on)
 		{
 			BOOST_CHECK(car.GetGear() == Gear::NEUTRAL);
 		}
-		BOOST_AUTO_TEST_CASE(can_reach_maximum_speed_value_when_engine_is_switched_on)
+		BOOST_AUTO_TEST_CASE(car_can_reach_maximum_speed_value_when_engine_is_switched_on)
 		{
 			CanSetGear(Gear::FIRST);
 			CanSetSpeed(30);
@@ -184,7 +184,7 @@ BOOST_FIXTURE_TEST_SUITE(Car, CarFixture)
 	};
 
 	BOOST_FIXTURE_TEST_SUITE(first_gear_is_switched_on, first_gear_is_switched_on_)
-		BOOST_AUTO_TEST_CASE(can_increase_speed_and_switch_on_third_gear_when_first_gear_is_switched_on)
+		BOOST_AUTO_TEST_CASE(can_switch_on_third_gear_when_speed_is_30_and_first_gear_is_switched_one)
 		{
 			CanSetSpeed(30);
 			BOOST_CHECK(car.GetSpeed() == 30);
