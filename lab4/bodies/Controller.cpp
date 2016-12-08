@@ -218,6 +218,6 @@ bool CController::Info() const
 		<< "2. CreateParallelepiped width, height, depth, density\n"
 		<< "3. CreateCone density, radius, height\n"
 		<< "4. CreateCylinder density, radius, height\n"
-		<< "... - end entering elements of compound body or exit\n";
+		<< "... - exit\n";
 	return true;
 }

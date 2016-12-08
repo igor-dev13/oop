@@ -20,7 +20,6 @@ private:
 	bool CreateParallelepiped(std::istream & args);
 	bool CreateCone(std::istream & args);
 	bool CreateCylinder(std::istream & args);
-	bool CController::CreateCompound(std::istream &args);
 
 private:
 	typedef std::map<std::string, std::function<bool(std::istream & args)>> ActionMap;
