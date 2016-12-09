@@ -1,0 +1,11 @@
+CreateSphere 15 10
+CreateCone 17 22 83
+CreateCompound
+CreateCylinder 14 15 16
+CreateCompound
+CreateParallelepiped 82 62 52 62
+...
+CreateCone 1 2 33
+CreateParallelepiped 12 2 13 82
+...
+CreateSphere 9 9
