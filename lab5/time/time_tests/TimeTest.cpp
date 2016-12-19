@@ -91,10 +91,13 @@ BOOST_AUTO_TEST_CASE(can_use_prefix_increment)
 
 BOOST_AUTO_TEST_CASE(can_use_postfix_increment)
 {
-	//BOOST_REQUIRE(CheckTime(CTime(0, 0, 0)++, 0, 0, 0));
-	//BOOST_REQUIRE(CheckTime(CTime(23, 11, 20)++, 23, 11, 20));
-	//BOOST_REQUIRE(CheckTime(CTime(23, 59, 59)++, 23, 59, 59));
-	//BOOST_REQUIRE(CheckTime(CTime(24, 00, 00)++, 24, 0, 0));
+	CTime time1(0, 0, 0);
+	BOOST_REQUIRE(CheckTime(time1++, 0, 0, 0));
+	BOOST_REQUIRE(CheckTime(time1, 0, 0, 1));
+
+	CTime time2(23, 59, 59);
+	BOOST_REQUIRE(CheckTime(time2++, 23, 59, 59));
+	BOOST_REQUIRE(CheckTime(time2, 0, 0, 0));
 }
 
 BOOST_AUTO_TEST_CASE(can_use_prefix_decriment)
@@ -105,10 +108,13 @@ BOOST_AUTO_TEST_CASE(can_use_prefix_decriment)
 
 BOOST_AUTO_TEST_CASE(can_use_postfix_decriment)
 {
-	//BOOST_REQUIRE(CheckTime(CTime(0, 0, 0)--, 0, 0, 0));
-	//BOOST_REQUIRE(CheckTime(CTime(23, 11, 20)--, 23, 11, 20));
-	//BOOST_REQUIRE(CheckTime(CTime(23, 59, 59)--, 23, 59, 59));
-	//BOOST_REQUIRE(CheckTime(CTime(24, 00, 00)--, 24, 0, 0));
+	CTime time1(0, 0, 0);
+	BOOST_REQUIRE(CheckTime(time1--, 0, 0, 0));
+	BOOST_REQUIRE(CheckTime(time1, 23, 59, 59));
+
+	CTime time2(23, 59, 59);
+	BOOST_REQUIRE(CheckTime(time2--, 23, 59, 59));
+	BOOST_REQUIRE(CheckTime(time2, 23, 59, 58));
 }
 
 BOOST_AUTO_TEST_CASE(can_handle_addition_operator_wrong_result)
@@ -145,5 +151,158 @@ BOOST_AUTO_TEST_CASE(can_use_assignment_operator)
 	BOOST_REQUIRE(CheckTime(time1, 0, 0, 20));
 }
 
+BOOST_AUTO_TEST_CASE(can_handle_assignment_addition_operator_wrong_result)
+{
+	CTime time1(100);
+	CTime time2(150);
+	time2 += time1;
+
+	BOOST_REQUIRE(!CheckTime(time2, 0, 0, 10));
+}
+
+BOOST_AUTO_TEST_CASE(can_use_assignment_addition_operator)
+{
+	CTime time1(40);
+	CTime time2(65);
+	time2 += time1;
+
+	BOOST_REQUIRE(CheckTime(time2, 0, 1, 45));
+}
+
+BOOST_AUTO_TEST_CASE(can_handle_assignment_subtraction_operator_wrong_result)
+{
+	CTime time1(150);
+	CTime time2(50);
+	time1 -= time2;
+
+	BOOST_REQUIRE(!CheckTime(time2, 0, 0, 20));
+}
+
+BOOST_AUTO_TEST_CASE(can_use_assignment_subtraction_operator)
+{
+	CTime time1(185);
+	CTime time2(50);
+	time1 -= time2;
+
+	BOOST_REQUIRE(CheckTime(time1, 0, 2, 15));
+}
+
+BOOST_AUTO_TEST_CASE(can_handle_multiplocation_operator_wrong_result)
+{
+	CTime time1(2);
+	CTime time2(2);
+	time1 *= time2;
+
+	BOOST_REQUIRE(!CheckTime(time1, 0, 0, 0));
+}
+
+BOOST_AUTO_TEST_CASE(can_use_assignment_multiplocation_operator)
+{
+	CTime time1(10);
+	CTime time2(10);
+	time1 *= time2;
+
+	BOOST_REQUIRE(CheckTime(time1, 0, 1, 40));
+}
+
+BOOST_AUTO_TEST_CASE(can_handle_assignment_division_by_zero)
+{
+	CTime time1(10);
+	CTime time2(0);
+	BOOST_REQUIRE_THROW(time1 /= time2, std::invalid_argument);
+}
+
+BOOST_AUTO_TEST_CASE(can_use_assignment_division_operator)
+{
+	CTime time3(10);
+	CTime time4(1);
+	time3 /= time4;
+
+	BOOST_REQUIRE(CheckTime(time3, 0, 0, 10));
+
+	CTime time5(1);
+	CTime time6(10);
+	time5 /= time6;
+
+	BOOST_REQUIRE(CheckTime(time5, 0, 0, 1));
+}
+
+BOOST_AUTO_TEST_CASE(can_handle_multiplication_operator_wrong_result)
+{
+	CTime multiplicationValue = CTime(0, 10, 0) * 3;
+	BOOST_CHECK(!CheckTime(multiplicationValue, 0, 10, 0));
+}
+
+BOOST_AUTO_TEST_CASE(can_use_multiplication_operator)
+{
+	CTime multiplicationValue1 = CTime(3, 5, 15) * 3;
+	BOOST_CHECK(CheckTime(multiplicationValue1, 9, 15, 45));
+
+	CTime multiplicationValue2 = CTime(3, 5, 15) * 0;
+	BOOST_CHECK(CheckTime(multiplicationValue2, 0, 0, 0));
+
+	CTime multiplicationValue3 = 3 * CTime(0, 10, 0);
+	BOOST_CHECK(CheckTime(multiplicationValue3, 0, 30, 0));
+}
+
+BOOST_AUTO_TEST_CASE(can_handle_division_by_zero)
+{
+	BOOST_REQUIRE_THROW(CTime(10) / 0, std::invalid_argument);
+}
+
+BOOST_AUTO_TEST_CASE(can_use_division_operator)
+{
+	BOOST_CHECK(CheckTime(CTime(42) / 10, 0, 0, 4));
+	BOOST_CHECK(CheckTime(CTime(40) / 10, 0, 0, 4));
+	BOOST_CHECK(CheckTime(CTime(100) / CTime(10), 0, 0, 10));
+	BOOST_CHECK(CheckTime(CTime(10) / CTime(100), 0, 0, 10));
+}
+
+BOOST_AUTO_TEST_CASE(can_use_comparison_operator)
+{
+	CTime time1(10);
+	CTime time2(10);
+	CTime time3(20);
+
+	BOOST_CHECK(time1 == time1);
+	BOOST_CHECK(time1 == time2);
+	BOOST_CHECK(time1 != time3);
+}
+
+BOOST_AUTO_TEST_CASE(can_use_strict_comparison_operator)
+{
+	CTime time1(10);
+	CTime time2(20);
+	CTime time3(30);
+
+	BOOST_CHECK(time3 > time1);
+	BOOST_CHECK(!(time3 < time2));	
+	BOOST_CHECK(time1 < time2);
+}
+
+BOOST_AUTO_TEST_CASE(can_use_nonstrict_comparison_operator)
+{
+	CTime time1(40);
+	CTime time2(50);
+	CTime time3(60);	
+
+	BOOST_REQUIRE(!(time1 >= time2));
+	BOOST_REQUIRE(time1 <= time2);
+	BOOST_REQUIRE(!(time2 >= time3));
+}
+
+BOOST_AUTO_TEST_CASE(can_output_time)
+{
+	CTime time(75490);
+	std::stringstream output;
+	output << time;
+	BOOST_CHECK_EQUAL(output.str(), "20:58:10");
+	output.str(std::string());
+
+	CTime time2(8, 41, 27);
+	output << time2;
+	BOOST_CHECK_EQUAL(output.str(), "08:41:27");
+	output.clear();
+}
 
 BOOST_AUTO_TEST_SUITE_END()

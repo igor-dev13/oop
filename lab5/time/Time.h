@@ -13,6 +13,7 @@ public:
 	unsigned GetMinutes()const;
 	unsigned GetSeconds()const;
 	bool IsValid()const;
+	std::string FormatTime()const;
 public:
 	CTime & operator++();
 	CTime const operator++(int);
@@ -21,6 +22,21 @@ public:
 	CTime operator + (CTime const & time2);
 	CTime operator - (CTime const & time2);
 	CTime & operator = (CTime const & other);
+	CTime & operator += (CTime const & other);
+	CTime & operator -= (CTime const & other);
+	CTime const operator * (unsigned number)const;
+	CTime const friend operator * (unsigned number, CTime const & other);
+	CTime const operator / (unsigned number)const;
+	unsigned operator / (CTime const & other)const;
+	CTime & operator *= (CTime const & other);
+	CTime & operator /= (CTime const & other);
+	bool operator == (CTime const & other)const;
+	bool operator != (CTime const & other)const;
+	bool operator > (CTime const & other)const;
+	bool operator < (CTime const & other)const;
+	bool operator >= (CTime const & other)const;
+	bool operator <= (CTime const & other)const;
+	std::ostream friend & operator << (std::ostream & output, const CTime & time);
 private:
 	unsigned m_seconds;
 	bool m_valid;
