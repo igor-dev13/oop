@@ -182,29 +182,22 @@ CTime const CTime::operator / (unsigned number)const
 	{
 		throw std::invalid_argument("Can't divide by zero!");
 	}
-
-	unsigned divisionValue = m_seconds;
-	if (number > 0 && m_seconds >= number)
-	{
-		divisionValue = m_seconds / number;
-	}
-	return CTime(divisionValue);
+	return CTime(m_seconds / number);
 }
 
 unsigned CTime::operator / (CTime const & other)const
 {	
-	CTime tmpCopy(other);
-	if (tmpCopy.m_seconds == 0)
+	if (other.m_seconds == 0)
 	{
 		throw std::invalid_argument("Can't divide by zero!");
+	}	
+
+	if (other.m_seconds < 0)
+	{
+		throw std::invalid_argument("Can't divide by negative value!");
 	}
 
-	unsigned divisionValue = m_seconds;
-	if (other.m_seconds > 0 && tmpCopy.m_seconds <= m_seconds)
-	{
-		divisionValue = m_seconds / tmpCopy.m_seconds;
-	}
-	return divisionValue;
+	return m_seconds / other.m_seconds;;
 }
 
 CTime & CTime::operator *= (CTime const & other)

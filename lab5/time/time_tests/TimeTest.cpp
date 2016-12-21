@@ -250,12 +250,18 @@ BOOST_AUTO_TEST_CASE(can_handle_division_by_zero)
 	BOOST_REQUIRE_THROW(CTime(10) / 0, std::invalid_argument);
 }
 
+BOOST_AUTO_TEST_CASE(can_handle_division_by_negative_value)
+{
+	BOOST_REQUIRE_THROW(CTime(10) / CTime(-5), std::invalid_argument);
+}
+
 BOOST_AUTO_TEST_CASE(can_use_division_operator)
 {
 	BOOST_CHECK(CheckTime(CTime(42) / 10, 0, 0, 4));
 	BOOST_CHECK(CheckTime(CTime(40) / 10, 0, 0, 4));
 	BOOST_CHECK(CheckTime(CTime(100) / CTime(10), 0, 0, 10));
-	BOOST_CHECK(CheckTime(CTime(10) / CTime(100), 0, 0, 10));
+	BOOST_CHECK(CheckTime(CTime(100) / CTime(1000), 0, 0, 0));
+	BOOST_CHECK(CheckTime(CTime(5, 0, 0) / CTime(10, 0, 0), 0, 0, 0));
 }
 
 BOOST_AUTO_TEST_CASE(can_use_comparison_operator)
