@@ -261,7 +261,7 @@ bool CTime::operator <= (CTime const & other)const
 	return (m_seconds <= other.m_seconds);
 }
 
-string CTime::FormatTime()const
+string CTime::TimeToString()const
 {
     string hours = "0" + to_string(m_seconds / SECONDS_IN_HOUR);
     string minutes = "0" + to_string((m_seconds / SECONDS_IN_MINUTE) - ((m_seconds / SECONDS_IN_HOUR) * SECONDS_IN_MINUTE));
@@ -272,6 +272,6 @@ string CTime::FormatTime()const
 
 std::ostream & operator << (std::ostream & output, const CTime & time)
 {
-	output << time.FormatTime();
+	output << time.TimeToString();
 	return output;
 }

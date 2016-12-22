@@ -13,7 +13,7 @@ public:
 	unsigned GetMinutes()const;
 	unsigned GetSeconds()const;
 	bool IsValid()const;
-	std::string FormatTime()const;
+	std::string TimeToString()const;
 public:
 	CTime & operator++();
 	CTime const operator++(int);
