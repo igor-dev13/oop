@@ -6,7 +6,7 @@ using namespace std;
 
 CTime::CTime(unsigned hours, unsigned minutes, unsigned seconds)	
 {
-	if ((minutes > 59 || seconds > 59) || (hours >= 24 && minutes > 0 && seconds > 0))
+	if (minutes > 59 || seconds > 59 || hours > 23)
 	{
 		m_valid = false;
 		m_seconds = 0;
