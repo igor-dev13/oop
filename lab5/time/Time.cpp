@@ -263,9 +263,9 @@ bool CTime::operator <= (CTime const & other)const
 
 string CTime::FormatTime()const
 {
-    string hours = "0" + to_string(m_seconds / 3600);
-    string minutes = "0" + to_string((m_seconds / 60) - ((m_seconds / 3600) * 60));
-    string seconds = "0" + to_string(m_seconds % 60);
+    string hours = "0" + to_string(m_seconds / SECONDS_IN_HOUR);
+    string minutes = "0" + to_string((m_seconds / SECONDS_IN_MINUTE) - ((m_seconds / SECONDS_IN_HOUR) * SECONDS_IN_MINUTE));
+    string seconds = "0" + to_string(m_seconds % SECONDS_IN_MINUTE);
 
     return hours.substr(hours.size() - 2) + ":" + minutes.substr(minutes.size() - 2) + ":" + seconds.substr(seconds.size() - 2);
 }
