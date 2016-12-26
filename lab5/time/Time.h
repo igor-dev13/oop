@@ -12,24 +12,22 @@ public:
 	unsigned GetHours()const;
 	unsigned GetMinutes()const;
 	unsigned GetSeconds()const;
-	bool IsValid()const;
 	std::string TimeToString()const;
 public:
 	CTime & operator++();
 	CTime const operator++(int);
 	CTime & operator--();
 	CTime const operator--(int);
-	CTime operator + (CTime const & time2);
-	CTime operator - (CTime const & time2);
-	CTime & operator = (CTime const & other);
+	CTime operator + (CTime const & time2)const;
+	CTime operator - (CTime const & time2)const;
 	CTime & operator += (CTime const & other);
 	CTime & operator -= (CTime const & other);
 	CTime const operator * (unsigned number)const;
 	CTime const friend operator * (unsigned number, CTime const & other);
 	CTime const operator / (unsigned number)const;
 	unsigned operator / (CTime const & other)const;
-	CTime & operator *= (CTime const & other);
-	CTime & operator /= (CTime const & other);
+	CTime & operator *= (unsigned number);
+	unsigned operator /= (CTime const & other);
 	bool operator == (CTime const & other)const;
 	bool operator != (CTime const & other)const;
 	bool operator > (CTime const & other)const;
@@ -39,5 +37,4 @@ public:
 	std::ostream friend & operator << (std::ostream & output, const CTime & time);
 private:
 	unsigned m_seconds;
-	bool m_valid;
 };

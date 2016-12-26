@@ -8,12 +8,10 @@ CTime::CTime(unsigned hours, unsigned minutes, unsigned seconds)
 {
 	if (minutes > 59 || seconds > 59 || hours > 23)
 	{
-		m_valid = false;
 		m_seconds = 0;
 		throw std::invalid_argument("Time must be in certain limits!");
 	}
 	
-	m_valid = true;
 	m_seconds = hours * SECONDS_IN_HOUR + minutes * SECONDS_IN_MINUTE + seconds;	
 }
 
@@ -21,18 +19,11 @@ CTime::CTime(unsigned timeStamp)
 {
 	if (timeStamp > SECONDS_IN_DAY)
 	{
-		m_valid = false;
 		m_seconds = 0;
 		throw std::invalid_argument("Maximum 86400 seconds in a day!");
 	}
 
-	m_valid = true;
 	m_seconds = timeStamp;
-}
-
-bool CTime::IsValid() const
-{
-	return m_valid;
 }
 
 unsigned CTime::GetHours()const
@@ -65,12 +56,7 @@ CTime & CTime::operator++()
 CTime const CTime::operator++(int)
 {
 	CTime tmpCopy(m_seconds);
-
-	++m_seconds;
-	if (m_seconds >= SECONDS_IN_DAY)
-	{
-		m_seconds = m_seconds - SECONDS_IN_DAY;
-	}
+	++*this;
 	return tmpCopy;
 }
 
@@ -90,38 +76,20 @@ CTime & CTime::operator--()
 CTime const CTime::operator--(int)
 {
 	CTime tmpCopy(m_seconds);
-	
-	if (m_seconds == 0)
-	{
-		m_seconds = SECONDS_IN_DAY - 1;
-	}
-	else
-	{
-		m_seconds = m_seconds - 1;
-	}
+	--*this;
 	return tmpCopy;
 }
 
-CTime CTime::operator + (CTime const & time2)
+CTime CTime::operator + (CTime const & time2)const
 {
 	unsigned additionValue = m_seconds + time2.m_seconds;
 	return CTime(additionValue % SECONDS_IN_DAY);
 }
 
-CTime  CTime::operator - (CTime const & time2)
+CTime  CTime::operator - (CTime const & time2)const
 {
 	signed subtractionValue = m_seconds - time2.m_seconds;
 	return CTime((subtractionValue < 0) ? SECONDS_IN_DAY - (subtractionValue * -1) : subtractionValue);
-}
-
-CTime & CTime::operator = (CTime const & other)
-{
-	if (std::addressof(other) != this)
-	{
-		CTime tmpCopy(other);
-		m_seconds = tmpCopy.m_seconds;
-	}
-	return *this;
 }
 
 CTime & CTime::operator += (CTime const & other)
@@ -192,43 +160,29 @@ unsigned CTime::operator / (CTime const & other)const
 		throw std::invalid_argument("Can't divide by zero!");
 	}	
 
-	if (other.m_seconds < 0)
-	{
-		throw std::invalid_argument("Can't divide by negative value!");
-	}
-
-	return m_seconds / other.m_seconds;;
+	return m_seconds / other.m_seconds;
 }
 
-CTime & CTime::operator *= (CTime const & other)
+CTime & CTime::operator *= (unsigned number)
 {
-	if (std::addressof(other) != this)
+	m_seconds *= number;
+
+	if (m_seconds > SECONDS_IN_DAY)
 	{
-		CTime tmpCopy(other);
-		unsigned multiplicationValue = m_seconds * tmpCopy.m_seconds;
-		m_seconds = multiplicationValue;
-	}
+		m_seconds = m_seconds % SECONDS_IN_DAY;
+	}	
 	return *this;
 }
 
-CTime & CTime::operator /= (CTime const & other)
+unsigned CTime::operator /= (CTime const & other)
 {
-	if (std::addressof(other) != this)
+	CTime tmpCopy(other);
+
+	if (tmpCopy.m_seconds == 0)
 	{
-		CTime tmpCopy(other);
-
-		if (tmpCopy.m_seconds == 0)
-		{
-			throw std::invalid_argument("Can't divide by zero!");
-		}
-
-		if (tmpCopy.m_seconds <= m_seconds)
-		{
-			unsigned divisionResult = m_seconds / tmpCopy.m_seconds;
-			m_seconds = divisionResult;
-		}
+		throw std::invalid_argument("Can't divide by zero!");
 	}
-	return *this;
+	return (m_seconds / tmpCopy.m_seconds);	
 }
 
 bool CTime::operator == (CTime const & other)const
