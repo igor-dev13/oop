@@ -1,51 +1,52 @@
-enum Protocol
+#pragma once
+#include "stdafx.h"
+#include "CUrlParsingError.h"
+
+enum class Protocol
 {
-	HTTP,
-	HTTPS
+	HTTP = 80,
+	HTTPS = 443
 };
 
-class CUrlParsingError : public std::invalid_argument
+namespace
 {
-public:
-	Е
-};
+	const unsigned short MIN_PORT = 1;
+	const unsigned short MAX_PORT = 65535;
+	const unsigned short DEFAULT_HTTP_PORT = 80;
+	const unsigned short DEFAULT_HTTPS_PORT = 443;
+}
 
 class CHttpUrl
 {
 public:
-	// выполн€ет парсинг строкового представлени€ URL-а, в случае ошибки парсинга
-	// выбрасыват исключение CUrlParsingError, содержащее текстовое описание ошибки
-	CHttpUrl(std::string const& url);
+	CHttpUrl(std::string const & url);
 
-	/* инициализирует URL на основе переданных параметров.
-	ѕри недопустимости входных параметров выбрасывает исключение
-	std::invalid_argument
-	≈сли им€ документа не начинаетс€ с символа /, то добавл€ет / к имени документа
-	*/
 	CHttpUrl(
-		std::string const& domain,
-		std::string const& document,
-		Protocol = HTTP,
+		const std::string &domain,
+		const std::string &document,
+		Protocol protocol = Protocol::HTTP,
 		unsigned short port = 80);
 
-	// возвращает строковое представление URL-а. ѕорт, €вл€ющийс€ стандартным дл€
-	// выбранного протокола (80 дл€ http и 443 дл€ https) в URL не должен включатьс€
 	std::string GetURL()const;
-
-	// возвращает доменное им€
 	std::string GetDomain()const;
-
-	/*
-	¬озвращает им€ документа. ѕримеры:
-	/
-	/index.html
-	/images/photo.jpg
-	*/
-	std::string GetDocument()const;
-
-	// возвращает тип протокола
+	std::string GetDocumentPath()const;
 	Protocol GetProtocol()const;
+	unsigned GetPort()const;
 
-	// возвращает номер порта
-	unsigned short GetPort()const;
+private:
+	std::string m_domain;
+	std::string m_document = "\\";
+	Protocol m_protocol = Protocol::HTTP;
+	unsigned m_port = 80;
 };
+
+namespace parsing
+{
+	Protocol StrToProtocol(std::string const & protocolStr);
+	std::string ProtocolToStr(Protocol protocol);
+
+	std::string ParseProtocol(std::string const & url);
+	std::string ParseDomain(std::string const & url);
+	unsigned ParsePort(std::string const & url);
+	std::string ParseDocumentPath(std::string const & url);	
+}
