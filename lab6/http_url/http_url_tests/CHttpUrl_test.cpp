@@ -21,6 +21,22 @@ BOOST_AUTO_TEST_SUITE(CHttpUrl_)
 		}
 	}
 
+	BOOST_AUTO_TEST_CASE(protocol_can_be_in_different_registers)
+	{
+		{
+			CHttpUrl urlHttp("hTTp://www.yandex.com/");
+			BOOST_CHECK(urlHttp.GetProtocol() == Protocol::HTTP);
+		}
+		{
+			CHttpUrl urlHttp("HTTP://www.yandex.com/");
+			BOOST_CHECK(urlHttp.GetProtocol() == Protocol::HTTP);
+		}
+		{
+			CHttpUrl urlHttp("https://www.yandex.com/");
+			BOOST_CHECK(urlHttp.GetProtocol() == Protocol::HTTPS);
+		}
+	}
+
 	BOOST_AUTO_TEST_CASE(can_handle_url_with_wrong_protocol)
 	{
 		BOOST_REQUIRE_THROW(CHttpUrl url("a."), CUrlParsingError);
@@ -148,17 +164,17 @@ BOOST_AUTO_TEST_SUITE(CHttpUrl_)
 		BOOST_REQUIRE_THROW(CHttpUrl url("www.yandex.ru", "docs/word.doc", Protocol::HTTPS, 0), std::invalid_argument);
 	}
 
-	BOOST_AUTO_TEST_CASE(port_and_protocol_can_be_initialized_by_default_values)
+	BOOST_AUTO_TEST_CASE(port_can_be_initialized_by_default_values)
 	{
 		{
-			CHttpUrl url("yandex.ru", "doc/00/word.doc");
+			CHttpUrl url("yandex.ru", "doc/00/word.doc", Protocol::HTTP);
 			BOOST_CHECK_EQUAL(url.GetURL(), "http://yandex.ru/doc/00/word.doc");
 			BOOST_CHECK(url.GetProtocol() == Protocol::HTTP);
 			BOOST_CHECK_EQUAL(url.GetPort(), 80);
 		}
 
 		{
-			CHttpUrl url("yandex.ru", "");
+			CHttpUrl url("yandex.ru", "", Protocol::HTTP);
 			BOOST_CHECK_EQUAL(url.GetURL(), "http://yandex.ru/");
 			BOOST_CHECK(url.GetProtocol() == Protocol::HTTP);
 			BOOST_CHECK_EQUAL(url.GetPort(), 80);
@@ -176,6 +192,21 @@ BOOST_AUTO_TEST_SUITE(CHttpUrl_)
 			CHttpUrl url("yandex.ru", "doc/00/word.doc", Protocol::HTTP);
 			BOOST_CHECK_EQUAL(url.GetURL(), "http://yandex.ru/doc/00/word.doc");
 			BOOST_CHECK_EQUAL(url.GetPort(), 80);
+		}
+	}
+
+	BOOST_AUTO_TEST_CASE(can_handle_invalid_url_port)
+	{
+		{
+			BOOST_REQUIRE_THROW(CHttpUrl url("http://www.yandex.ru:88 08/image"), std::invalid_argument);
+			BOOST_REQUIRE_THROW(CHttpUrl url2("http://www.yandex.ru:8 000/doc/7"), std::invalid_argument);
+
+			BOOST_REQUIRE_THROW(CHttpUrl url3("http://www.yandex.ru:номер_порта/doc/7"), std::invalid_argument);
+			BOOST_REQUIRE_THROW(CHttpUrl url4("http://www.yandex.ru:восемьдесяттри/doc/7"), std::invalid_argument);
+		}
+		{
+			CHttpUrl url("http://www.yandex.ru:8808/image");
+			BOOST_CHECK_EQUAL(url.GetPort(), 8808);
 		}
 	}
 

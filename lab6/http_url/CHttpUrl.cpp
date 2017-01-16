@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "CHttpUrl.h"
+#include <cctype>
 
 using namespace parsing;
 
@@ -28,16 +29,24 @@ CHttpUrl::CHttpUrl(std::string const & url)
 	m_document = ParseDocumentPath(urlStr);
 }
 
+CHttpUrl::CHttpUrl(std::string const &domain, std::string const &document, Protocol protocol)
+	: m_domain(ParseDomain(domain))
+	, m_document(ParseDocumentPath(document))
+	, m_protocol(protocol)
+{
+	m_port = (m_protocol == Protocol::HTTP) ? 80 : 443;
+}
+
 CHttpUrl::CHttpUrl(std::string const &domain, std::string const &document, Protocol protocol, unsigned short port)
 	: m_domain(ParseDomain(domain))
 	, m_document(ParseDocumentPath(document))
 	, m_protocol(protocol)
+	, m_port(port)
 {
 	if (port == 0 )
 	{
 		throw std::invalid_argument("Port must not be equal to zero");
 	}
-	m_port = (port == DEFAULT_HTTP_PORT) ? static_cast<unsigned short>(protocol) : port;
 }
 
 std::string CHttpUrl::GetURL() const
@@ -127,13 +136,16 @@ std::string parsing::ParseDocumentPath(std::string const & url)
 		throw std::invalid_argument("Invalid URL document path.") : document;
 }
 
-Protocol parsing::StrToProtocol( std::string const & protocolStr)
+Protocol parsing::StrToProtocol(std::string const & protocolStr)
 {
-	if (protocolStr == "http")
+	std::string protocol = protocolStr;
+	std::transform(protocol.begin(), protocol.end(), protocol.begin(), tolower);
+
+	if (protocol == "http")
 	{
 		return Protocol::HTTP;
 	}
-	else if (protocolStr == "https")
+	else if (protocol == "https")
 	{
 		return Protocol::HTTPS;
 	}

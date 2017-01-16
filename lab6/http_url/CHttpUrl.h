@@ -21,11 +21,19 @@ class CHttpUrl
 public:
 	CHttpUrl(std::string const & url);
 
+	// принимает домен, документ и прококол(по умолчанию http)
+	// принимает домен, документ, протокол и порт
+
 	CHttpUrl(
 		const std::string &domain,
 		const std::string &document,
-		Protocol protocol = Protocol::HTTP,
-		unsigned short port = 80);
+		Protocol protocol = Protocol::HTTP);
+
+	CHttpUrl(
+		const std::string &domain,
+		const std::string &document,
+		Protocol protocol,
+		unsigned short port);
 
 	std::string GetURL()const;
 	std::string GetDomain()const;
