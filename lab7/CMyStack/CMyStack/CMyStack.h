@@ -81,16 +81,17 @@ public:
 	//{
 	//	if (this != std::addressof(stack))
 	//	{
-	//		CMyStack<T> tempStack;
-	//		auto tmpNode = stack.m_top;
+	//		CMyStack<T> tempStack;		
+	//		auto node = stack.m_top;
 
-	//		while (tmpNode != nullptr)
+	//		while (node != nullptr)
 	//		{
-	//			tempStack.Push(tmpNode->value);
-	//			tmpNode = tmpNode->next;
+	//			tempStack.Push(node->value);
+	//			node = node->next;
 	//		}
 	//		
 	//		m_top = tempStack.m_top;
+	//		m_size = tempStack.GetSize();
 	//	}	
 
 	//	return *this;
