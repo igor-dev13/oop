@@ -77,53 +77,59 @@ public:
 		return(m_top->value);
 	}	
 
-	//CMyStack &operator = (CMyStack<T> const &stack)
-	//{
-	//	if (this != std::addressof(stack))
-	//	{
-	//		CMyStack<T> tempStack;		
-	//		auto node = stack.m_top;
-
-	//		while (node != nullptr)
-	//		{
-	//			tempStack.Push(node->value);
-	//			node = node->next;
-	//		}
-	//		
-	//		m_top = tempStack.m_top;
-	//		m_size = tempStack.GetSize();
-	//	}	
-
-	//	return *this;
-	//}
-
 	CMyStack &operator = (CMyStack<T> const &stack)
 	{
 		if (this != std::addressof(stack))
 		{
-			auto tmpNode = stack.m_top;
-			auto pointer = std::make_shared<Node>();
-			auto prevPointer = pointer;
+			CMyStack<T> tempStack;		
+			auto node = stack.m_top;
 
-			pointer->value = tmpNode->value;
-			tmpNode = tmpNode->next;
-
-			while (tmpNode != nullptr)
+			while (node != nullptr)
 			{
-				auto newNode = std::make_shared<Node>();
-				newNode->value = tmpNode->value;
-
-				prevPointer->next = newNode;
-				prevPointer = newNode;
-				tmpNode = tmpNode->next;
+				tempStack.Push(node->value);
+				node = node->next;
 			}
+					
+			Clear();			
+			auto node2 = tempStack.m_top;
 
-			m_size = stack.GetSize();
-			m_top = pointer;
-		}
+			while (node2 != nullptr)
+			{
+				Push(node2->value);
+				node2 = node2->next;
+			}			
+		}	
 
 		return *this;
 	}
+
+	//CMyStack &operator = (CMyStack<T> const &stack)
+	//{
+	//	if (this != std::addressof(stack))
+	//	{
+	//		auto tmpNode = stack.m_top;
+	//		auto pointer = std::make_shared<Node>();
+	//		auto prevPointer = pointer;
+
+	//		pointer->value = tmpNode->value;
+	//		tmpNode = tmpNode->next;
+
+	//		while (tmpNode != nullptr)
+	//		{
+	//			auto newNode = std::make_shared<Node>();
+	//			newNode->value = tmpNode->value;
+
+	//			prevPointer->next = newNode;
+	//			prevPointer = newNode;
+	//			tmpNode = tmpNode->next;
+	//		}
+
+	//		m_size = stack.GetSize();
+	//		m_top = pointer;
+	//	}
+
+	//	return *this;
+	//}
 
 	CMyStack &operator = (CMyStack<T> &&stack)
 	{
