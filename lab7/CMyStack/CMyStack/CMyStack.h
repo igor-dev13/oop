@@ -77,6 +77,25 @@ public:
 		return(m_top->value);
 	}	
 
+	//CMyStack &operator = (CMyStack<T> const &stack)
+	//{
+	//	if (this != std::addressof(stack))
+	//	{
+	//		CMyStack<T> tempStack;
+	//		auto tmpNode = stack.m_top;
+
+	//		while (tmpNode != nullptr)
+	//		{
+	//			tempStack.Push(tmpNode->value);
+	//			tmpNode = tmpNode->next;
+	//		}
+	//		
+	//		m_top = tempStack.m_top;
+	//	}	
+
+	//	return *this;
+	//}
+
 	CMyStack &operator = (CMyStack<T> const &stack)
 	{
 		if (this != std::addressof(stack))
@@ -121,6 +140,11 @@ public:
 
 	bool CMyStack<T>::operator == (CMyStack const &stack)const
 	{
+		if (this == std::addressof(stack))
+		{
+			return true;
+		}
+
 		auto node1 = m_top;
 		auto node2 = stack.m_top;
 
@@ -151,7 +175,7 @@ public:
 private:
 	struct Node
 	{
-		T value = T();
+		T value;
 		std::shared_ptr<Node> next = nullptr;
 	};
 

@@ -101,27 +101,26 @@ BOOST_FIXTURE_TEST_SUITE(Stack, EmptyStack)
 
 	BOOST_AUTO_TEST_CASE(can_be_created_by_copy_assign_operator)
 	{
-		size_t currentSize = 10;
-		FillCMyStackByString(stringStack, currentSize);
-		FillCMyStackByInt(intStack, currentSize);
+		CMyStack<int> newIntStack1;
+		CMyStack<std::string> newStringStack1;
 
-		CMyStack<int> newIntStack1(intStack);
-		CMyStack<int> newIntStack2 = intStack;
+		FillCMyStackByString(stringStack, 10);
+		FillCMyStackByInt(intStack, 10);
+
+		FillCMyStackByInt(newIntStack1, 20);
+		FillCMyStackByString(newStringStack1, 20);
+
+		BOOST_CHECK_EQUAL(newIntStack1.GetSize(), 20);	
+		BOOST_CHECK_EQUAL(newStringStack1.GetSize(), 20);
+
+		newIntStack1 = intStack;
+		newStringStack1 = stringStack;
 
 		BOOST_CHECK_EQUAL(newIntStack1.GetSize(), intStack.GetSize());
-		BOOST_CHECK_EQUAL(newIntStack2.GetSize(), intStack.GetSize());
-
 		BOOST_CHECK(newIntStack1 == intStack);
-		BOOST_CHECK(newIntStack2 == intStack);
-
-		CMyStack<std::string> newStringStack1(stringStack);
-		CMyStack<std::string> newStringStack2 = stringStack;
 
 		BOOST_CHECK_EQUAL(newStringStack1.GetSize(), stringStack.GetSize());
-		BOOST_CHECK_EQUAL(newStringStack2.GetSize(), stringStack.GetSize());
-
 		BOOST_CHECK(newStringStack1 == stringStack);
-		BOOST_CHECK(newStringStack2 == stringStack);
 	}
 
 	BOOST_AUTO_TEST_CASE(can_be_compared)
