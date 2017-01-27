@@ -90,51 +90,27 @@ public:
 				node = node->next;
 			}
 					
-			Clear();			
-			auto node2 = tempStack.m_top;
-
-			while (node2 != nullptr)
+			if (tempStack.GetSize() == stack.GetSize())
 			{
-				Push(node2->value);
-				node2 = node2->next;
+				Clear();
+				auto node2 = tempStack.m_top;
+
+				while (node2 != nullptr)
+				{
+					Push(node2->value);
+					node2 = node2->next;
+				}
 			}			
 		}	
 
 		return *this;
 	}
 
-	//CMyStack &operator = (CMyStack<T> const &stack)
-	//{
-	//	if (this != std::addressof(stack))
-	//	{
-	//		auto tmpNode = stack.m_top;
-	//		auto pointer = std::make_shared<Node>();
-	//		auto prevPointer = pointer;
-
-	//		pointer->value = tmpNode->value;
-	//		tmpNode = tmpNode->next;
-
-	//		while (tmpNode != nullptr)
-	//		{
-	//			auto newNode = std::make_shared<Node>();
-	//			newNode->value = tmpNode->value;
-
-	//			prevPointer->next = newNode;
-	//			prevPointer = newNode;
-	//			tmpNode = tmpNode->next;
-	//		}
-
-	//		m_size = stack.GetSize();
-	//		m_top = pointer;
-	//	}
-
-	//	return *this;
-	//}
-
 	CMyStack &operator = (CMyStack<T> &&stack)
 	{
 		if (this != std::addressof(stack))
 		{
+			Clear();
 			m_top = stack.m_top;
 			m_size = stack.GetSize();
 
@@ -147,28 +123,26 @@ public:
 
 	bool CMyStack<T>::operator == (CMyStack const &stack)const
 	{
-		if (this == std::addressof(stack))
+		if (this != std::addressof(stack))
 		{
-			return true;
-		}
+			auto node1 = m_top;
+			auto node2 = stack.m_top;
 
-		auto node1 = m_top;
-		auto node2 = stack.m_top;
-
-		if (GetSize() != stack.GetSize())
-		{
-			return false;
-		}		
-
-		while (node1 != nullptr)
-		{
-			if (node1->value != node2->value)
+			if (GetSize() != stack.GetSize())
 			{
 				return false;
 			}
 
-			node1 = node1->next;
-			node2 = node2->next;
+			while (node1 != nullptr)
+			{
+				if (node1->value != node2->value)
+				{
+					return false;
+				}
+
+				node1 = node1->next;
+				node2 = node2->next;
+			}
 		}
 
 		return true;

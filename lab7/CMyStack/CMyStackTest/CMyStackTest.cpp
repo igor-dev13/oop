@@ -99,7 +99,7 @@ BOOST_FIXTURE_TEST_SUITE(Stack, EmptyStack)
 		BOOST_CHECK_EQUAL(secondStack.GetLastElement(), intStack.GetLastElement());
 	}
 
-	BOOST_AUTO_TEST_CASE(can_be_created_by_copy_assign_operator)
+	BOOST_AUTO_TEST_CASE(can_use_copy_assign_operator)
 	{
 		CMyStack<int> newIntStack1;
 		CMyStack<std::string> newStringStack1;
@@ -212,20 +212,27 @@ BOOST_FIXTURE_TEST_SUITE(Stack, EmptyStack)
 		BOOST_CHECK_EQUAL(stringStack.GetSize(), 10);
 	}
 
-	BOOST_AUTO_TEST_CASE(can_be_created_by_moved_assign_operator)
+	BOOST_AUTO_TEST_CASE(can_use_moved_assign_operator)
 	{
 		size_t currentSize = 10;
 		FillCMyStackByString(stringStack, currentSize);
 		FillCMyStackByInt(intStack, currentSize);
 
-		CMyStack<int> prevIntStackState = intStack;
-		CMyStack<std::string> prevStringStackState = stringStack;
+		CMyStack<int> prevIntStackState(intStack);
+		CMyStack<std::string> prevStringStackState(stringStack);
 
-		CMyStack<int> newIntStack = std::move(intStack);
+		CMyStack<int> newIntStack;
+		CMyStack<std::string> newStringStack;		
+
+		FillCMyStackByString(newStringStack, currentSize);
+		FillCMyStackByInt(newIntStack, currentSize);
+
+		newIntStack = std::move(intStack);
+		newStringStack = std::move(stringStack);
+				
 		BOOST_CHECK(intStack.IsStackEmpty());
 		BOOST_CHECK(newIntStack == prevIntStackState);
-
-		CMyStack<std::string> newStringStack = std::move(stringStack);
+				
 		BOOST_CHECK(stringStack.IsStackEmpty());
 		BOOST_CHECK(newStringStack == prevStringStackState);
 	}
@@ -252,10 +259,18 @@ BOOST_FIXTURE_TEST_SUITE(Stack, EmptyStack)
 
 		BOOST_AUTO_TEST_CASE(without_stack_overflow_exception)
 		{
-			CMyStack<int> intStack;
-			FillCMyStackByInt(intStack, 200000);
+			{
+				FillCMyStackByInt(intStack, 200000);
+				BOOST_CHECK_NO_THROW(intStack.~CMyStack());
+			}
+			{
+				FillCMyStackByString(stringStack, 200000);
+				CMyStack<std::string> newStringStack;		
 
-			BOOST_CHECK_NO_THROW(intStack.~CMyStack());
+				BOOST_CHECK_NO_THROW(newStringStack = std::move(stringStack));
+				BOOST_CHECK(stringStack.IsStackEmpty());
+				BOOST_CHECK_EQUAL(newStringStack.GetSize(), 200000);
+			}
 		}
 
 	BOOST_AUTO_TEST_SUITE_END()
